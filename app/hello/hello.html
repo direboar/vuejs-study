@@ -51,7 +51,10 @@
     <div id="event-sample">
         <p>イベント処理のサンプル<br/> {{message}} <br/>
             <button v-on:click="reverseMessage">Reverse Message</button>
+<<<<<<< HEAD
 
+=======
+>>>>>>> f665891b9afe9376cb075bc9e3dffd807c82bfd1
             <!--v-on:xxx="yyy" xxx:JavaScriptのイベントハンドラ、yyy:Vueインスタンスのメソッドを紐づける-->
         </p>
         <hr/>
@@ -133,6 +136,7 @@
             }
         }
     });
+<<<<<<< HEAD
 
     var app6 = new Vue({
         el: '#vmodel-sample',
@@ -141,6 +145,16 @@
         }
     });
 
+=======
+
+    var app6 = new Vue({
+        el: '#vmodel-sample',
+        data: {
+            message: 'Hello,World!'
+        }
+    });
+
+>>>>>>> f665891b9afe9376cb075bc9e3dffd807c82bfd1
     //テンプレートの例
     // todo-item と呼ばれる新しいコンポーネントを定義
     // テンプレートは、それを使用するVueインスタンスより前に定義する必要がある。
