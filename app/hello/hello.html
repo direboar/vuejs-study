@@ -2,201 +2,186 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Untitled Document</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <script src="../../js/vuejs/vue.js"></script>
+  <meta charset="UTF-8">
+  <title>Untitled Document</title>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <script src="../../js/vuejs/vue.js"></script>
 </head>
 
 <body>
-    <a href="https://jp.vuejs.org/v2/guide/index.html#%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E5%85%A5%E5%8A%9B%E3%81%AE%E5%88%B6%E5%BE%A1">はじめに</a>を写経。
+  <a href="https://jp.vuejs.org/v2/guide/index.html#%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E5%85%A5%E5%8A%9B%E3%81%AE%E5%88%B6%E5%BE%A1">はじめに</a>を写経。
+  <hr/>
+  <div id="app">
+    <p>双方向マッピングのサンプル<br/> {{ message }}
+      <!--elでバインドされたVueインスタンスのデータ属性と双方向でマッピングされる。-->
+    </p>
     <hr/>
-    <div id="app">
-        <p>双方向マッピングのサンプル<br/> {{ message }}
-            <!--elでバインドされたVueインスタンスのデータ属性と双方向でマッピングされる。-->
-        </p>
-        <hr/>
-    </div>
-    <div id="bind-sample">
-        <p>タグの属性にバインドするサンプル<br/>
-            <span v-bind:title="message"> <!--v-bind:xxx　で、対象のタグの属性に、Vueインスタンスのデータ属性をバインド（束縛）する -->
+  </div>
+  <div id="bind-sample">
+    <p>タグの属性にバインドするサンプル<br/>
+      <span v-bind:title="message"> <!--v-bind:xxx　で、対象のタグの属性に、Vueインスタンスのデータ属性をバインド（束縛）する -->
             テキストコンテンツです。
         </span>
-        </p>
-        <hr/>
-    </div>
-    <!--分岐処理のサンプル。-->
-    <div id="if-sample">
-        <p>分岐処理のサンプル<br/>
-            <!--v-if="属性名"でtrue、非Nullの属性が指定された場合は、対象のタグが表示される。-->
-            <span v-if="seen">表示されています。<a href="aaa">aaa</a></span><br/>
-            <input v-model="seen" />
-        </p>
-        <hr/>
-    </div>
-    <!--ループ処理のサンプル。-->
-    <div id="for-sample">
-        <p>ループ処理のサンプル<br/></p>
-        <ol>
-            <li v-for="todo in todos">
-                <!--xxx in yyy の表記。Vueインスタンスの配列属性をyyyに指定。ループ内の一時変数をxxxに指定。-->
-                {{todo.text}}
-                <!--一時変数.属性でバインドする。-->
-            </li>
-        </ol>
-        <hr/>
-    </div>
-    <!-- ユーザー入力の制御 から。-->
-    <!--イベント処理-->
-    <div id="event-sample">
-        <p>イベント処理のサンプル<br/> {{message}} <br/>
-            <button v-on:click="reverseMessage">Reverse Message</button>
-<<<<<<< HEAD
+    </p>
+    <hr/>
+  </div>
+  <!--分岐処理のサンプル。-->
+  <div id="if-sample">
+    <p>分岐処理のサンプル<br/>
+      <!--v-if="属性名"でtrue、非Nullの属性が指定された場合は、対象のタグが表示される。-->
+      <span v-if="seen">表示されています。<a href="aaa">aaa</a></span><br/>
+      <input v-model="seen" />
+    </p>
+    <hr/>
+  </div>
+  <!--ループ処理のサンプル。-->
+  <div id="for-sample">
+    <p>ループ処理のサンプル<br/></p>
+    <ol>
+      <li v-for="todo in todos">
+        <!--xxx in yyy の表記。Vueインスタンスの配列属性をyyyに指定。ループ内の一時変数をxxxに指定。-->
+        {{todo.text}}
+        <!--一時変数.属性でバインドする。-->
+      </li>
+    </ol>
+    <hr/>
+  </div>
+  <!-- ユーザー入力の制御 から。-->
+  <!--イベント処理-->
+  <div id="event-sample">
+    <p>イベント処理のサンプル<br/> {{message}} <br/>
+      <button v-on:click="reverseMessage">Reverse Message</button>
+      <!--v-on:xxx="yyy" xxx:JavaScriptのイベントハンドラ、yyy:Vueインスタンスのメソッドを紐づける-->
+    </p>
+    <hr/>
+  </div>
+  <!--双方向ディレクティブ-->
+  <div id="vmodel-sample">
+    <p>双方向ディレクティブのサンプル<br/> {{message}}
+      <input v-model="message" />
+      <hr/>
+  </div>
 
-=======
->>>>>>> f665891b9afe9376cb075bc9e3dffd807c82bfd1
-            <!--v-on:xxx="yyy" xxx:JavaScriptのイベントハンドラ、yyy:Vueインスタンスのメソッドを紐づける-->
-        </p>
-        <hr/>
-    </div>
-    <!--双方向ディレクティブ-->
-    <div id="vmodel-sample">
-        <p>双方向ディレクティブのサンプル<br/> {{message}}
-            <input v-model="message" />
-            <hr/>
-    </div>
-
-    <!--テンプレート-->
-    <div id="template-sample">
-        <ol>
-            <todo-item></todo-item>
-        </ol>
-    </div>
-    <div id="template-withparam-sample">
-        <ol>
-            <!--パラメータ付きのコンポーネント。詳細は別途かな…-->
-            <todo-item-withparam v-for="item in groceryList" v-bind:todo="item"></todo-item-withparam>
-        </ol>
-    </div>
+  <!--テンプレート-->
+  <div id="template-sample">
+    <ol>
+      <todo-item></todo-item>
+    </ol>
+  </div>
+  <div id="template-withparam-sample">
+    <ol>
+      <!--パラメータ付きのコンポーネント。詳細は別途かな…-->
+      <todo-item-withparam v-for="item in groceryList" v-bind:todo="item"></todo-item-withparam>
+    </ol>
+  </div>
 
 </body>
 
 <script language="JavaScript">
-    var app = new Vue({
-        //HTML中のid属性と同じ値をしてバインドする。
-        el: '#app',
-        //データの定義
-        data: {
-            message: 'Hello Vue!',
-            message2: 'Goodby Vue!'
-        }
-    });
-    <!-- 複数のViewインスタンスの生成可能。バインド先のELを変えるイメージ。 -->
-    var app2 = new Vue({
-        //HTML中のid属性と同じ値をしてバインドする。
-        el: '#bind-sample',
-        //データの定義
-        data: {
-            message: 'あなたは' + new Date().toLocaleDateString() + 'にこのページを開きました。'
-        }
-    });
+  var app = new Vue({
+    //HTML中のid属性と同じ値をしてバインドする。
+    el: '#app',
+    //データの定義
+    data: {
+      message: 'Hello Vue!',
+      message2: 'Goodby Vue!'
+    }
+  });
+  <!-- 複数のViewインスタンスの生成可能。バインド先のELを変えるイメージ。 -->
+  var app2 = new Vue({
+    //HTML中のid属性と同じ値をしてバインドする。
+    el: '#bind-sample',
+    //データの定義
+    data: {
+      message: 'あなたは' + new Date().toLocaleDateString() + 'にこのページを開きました。'
+    }
+  });
 
-    var app3 = new Vue({
-        el: '#if-sample',
-        data: {
-            seen: true
-        }
-    });
+  var app3 = new Vue({
+    el: '#if-sample',
+    data: {
+      seen: true
+    }
+  });
 
-    var app4 = new Vue({
-        el: '#for-sample',
-        data: {
-            todos: [ //配列データを作成
-                {
-                    text: 'JavaScriptを勉強します。'
-                },
-                {
-                    text: 'Javaはもういいです。'
-                },
-                {
-                    text: 'Vue.js割合楽しいです'
-                }
-            ]
-        }
-    });
-
-    var app5 = new Vue({
-        el: '#event-sample',
-        data: {
-            message: 'Hello,World!'
+  var app4 = new Vue({
+    el: '#for-sample',
+    data: {
+      todos: [ //配列データを作成
+        {
+          text: 'JavaScriptを勉強します。'
         },
-        methods: {
-            reverseMessage: function() {
-                this.message = this.message.split('').reverse().join('');
-            }
+        {
+          text: 'Javaはもういいです。'
+        },
+        {
+          text: 'Vue.js割合楽しいです'
         }
-    });
-<<<<<<< HEAD
+      ]
+    }
+  });
 
-    var app6 = new Vue({
-        el: '#vmodel-sample',
-        data: {
-            message: 'Hello,World!'
-        }
-    });
+  var app5 = new Vue({
+    el: '#event-sample',
+    data: {
+      message: 'Hello,World!'
+    },
+    methods: {
+      reverseMessage: function() {
+        this.message = this.message.split('').reverse().join('');
+      }
+    }
+  });
 
-=======
+  var app6 = new Vue({
+    el: '#vmodel-sample',
+    data: {
+      message: 'Hello,World!'
+    }
+  });
 
-    var app6 = new Vue({
-        el: '#vmodel-sample',
-        data: {
-            message: 'Hello,World!'
+  //テンプレートの例
+  // todo-item と呼ばれる新しいコンポーネントを定義
+  // テンプレートは、それを使用するVueインスタンスより前に定義する必要がある。
+  Vue.component('todo-item', {
+    template: '<li>This is a todo</li>'
+  });
+  //テンプレートを使うVueインスタンス。
+  var app7 = new Vue({
+    el: '#template-sample',
+    data: {
+      groceryList: [{
+          text: 'JavaScriptを勉強します。'
+        },
+        {
+          text: 'Javaはもういいです。'
+        },
+        {
+          text: 'Vue.js割合楽しいです'
         }
-    });
-
->>>>>>> f665891b9afe9376cb075bc9e3dffd807c82bfd1
-    //テンプレートの例
-    // todo-item と呼ばれる新しいコンポーネントを定義
-    // テンプレートは、それを使用するVueインスタンスより前に定義する必要がある。
-    Vue.component('todo-item', {
-        template: '<li>This is a todo</li>'
-    });
-    //テンプレートを使うVueインスタンス。
-    var app7 = new Vue({
-        el: '#template-sample',
-        data: {
-            groceryList: [{
-                    text: 'JavaScriptを勉強します。'
-                },
-                {
-                    text: 'Javaはもういいです。'
-                },
-                {
-                    text: 'Vue.js割合楽しいです'
-                }
-            ]
+      ]
+    }
+  });
+  Vue.component('todo-item-withparam', {
+    props: ['todo'],
+    template: '<li> {{todo.text}} </li>'
+  });
+  //テンプレートを使うVueインスタンス。
+  var app8 = new Vue({
+    el: '#template-withparam-sample',
+    data: {
+      groceryList: [{
+          text: 'JavaScriptを勉強します。'
+        },
+        {
+          text: 'Javaはもういいです。'
+        },
+        {
+          text: 'Vue.js割合楽しいです'
         }
-    });
-    Vue.component('todo-item-withparam', {
-        props: ['todo'],
-        template: '<li> {{todo.text}} </li>'
-    });
-    //テンプレートを使うVueインスタンス。
-    var app8 = new Vue({
-        el: '#template-withparam-sample',
-        data: {
-            groceryList: [{
-                    text: 'JavaScriptを勉強します。'
-                },
-                {
-                    text: 'Javaはもういいです。'
-                },
-                {
-                    text: 'Vue.js割合楽しいです'
-                }
-            ]
-        }
-    });
+      ]
+    }
+  });
 </script>
 
 </html>
