@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>TITLE</title>
+  <script src="../../js/vuejs/vue.js"></script>
+
+  <!--[if lt IE 9]>
+       <script src = "http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+     <![endif]-->
+</head>
+
+<body>
+  <a href="https://jp.vuejs.org/v2/guide/syntax.html">テンプレート構文　</a>
+  <div  id="app1">
+    <span>{{message}}</span><br/>
+    <span v-once>{{message}}</span><br/> <!-- v-once：データ変更時の更新はおこなわず、一度だけ展開することができます。ただし、同じノードのあらゆるバインディングが影響を受けることに注意してください: -->
+    <input v-model="message"/></br>
+    <span v-html="html"/></span><br/> <!--v-htmlを使うとtextをHTMLとして評価して表示できる。 -->
+    {{html}}<br/>
+    <span v-bind:title="title" /><br/>    <!--HTMLタグ内の属性にバインドする場合。-->
+    <button v-bind:disabled="buttondisabled">押せないボタン</button><br/>
+    {{number + 10}}<br/> <!--式を設定できる。-->
+    <p v-if="ifdirective">v-ifで評価されます</p>
+    v-ifで評価するifdirective(空文字にすると消えます)<input v-model="ifdirective"></input></br>
+
+    <a v-bind:href="url">URL<a/></br>
+    リンク先を入れます<input v-model="url"/></br>
+
+    <!--省略記法-->
+    <a :href="url">URL<a/></br><!--v-bindは:で始めることで省略可能-->
+    <button @click="hello">Hello</button><!--v-onは@で始めることで省略可能-->
+
+
+  </div>
+</body>
+
+<script>
+  var app1 = new Vue({
+    el: '#app1',
+    data: {
+      message : 'hello',
+      html : '<span style="color:red">あかい</span>',
+      title: 'タイトル',
+      buttondisabled :true,
+      number : 1,
+      ifdirective: true,
+      url : 'http://www.yahoo.co.jp'
+    },
+    methods :{
+      hello : function(){
+        alert('hello,world');
+      }
+    }
+  });
+</script>
+
+</html>

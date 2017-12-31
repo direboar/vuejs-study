@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>TITLE</title>
+  <script src="../../js/vuejs/vue.js"></script>
+</head>
+
+<body>
+  <a href="https://jp.vuejs.org/v2/guide/instance.html">Vue インスタンス　</a>
+  <div id="lifecycle">
+    {{message}} <br/> {{status}} <br/>
+    <input v-model="message" />
+    <!-- <button v-on:click="replace">ボタン</button> -->
+  </div>
+</body>
+
+<script>
+  var app1 = new Vue({
+    el: '#lifecycle',
+    data: {
+      message: 'hello',
+      status: ''
+    },
+
+    //インスタンスライフサイクルフック　https://jp.vuejs.org/v2/guide/instance.html
+    created: function() {
+      this.status = 'created';
+    },
+    beforeUpdate: function() {
+      alert('beforeUpdate');
+    },
+    updated: function() {
+      this.status = 'updated';
+    },
+    // methods : {
+    //   replace : function(){
+    //     this.$data = datax;
+    //   }
+    // }
+  });
+</script>
+
+</html>
