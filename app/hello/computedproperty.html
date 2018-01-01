@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>TITLE</title>
+  <script src="../../js/vuejs/vue.js"></script>
+
+  <!--[if lt IE 9]>
+       <script src = "http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+     <![endif]-->
+</head>
+
+<body>
+  <a href="https://jp.vuejs.org/v2/guide/computed.html#ウォッチャ">算出プロパティ</a>を写経。
+  <div id="computed">
+    <input v-model="message" / /><br/> {{reverseMessage}}
+    <br/> {{reverseMessageFunc()}}
+    <br/> {{reverseMessage}}
+    <br/> {{reverseMessageFunc()}}
+    <br/> {{date}}
+    <br/> {{dateFunc()}}
+    <br/> {{date}}
+    <br/> {{dateFunc()}}
+    <br/>
+  </div>
+
+  <div id="setter-getter">
+    苗字：<input v-model="firstName" /><br />
+    名前：<input v-model="lastName" /><br />
+    フルネーム : {{fullName}}<br />
+    フルネーム : <input v-model="fullName" /><br />
+  </div>
+
+  <div id="watch-example">
+    <p>
+      Ask a yes/no question:
+      <input v-model="question" />
+    </p>
+    <p>
+      {{answer}}
+    </p>
+  </div>
+
+</body>
+<script>
+  //導出プロパティのサンプル。
+  var app1 = new Vue({
+    el: "#computed",
+    data: {
+      message: 'Hello,world'
+    },
+    computed: { /**算出プロパティ。methodssと違い、参照している値（この場合message)が変更されたときにのみ評価されるので早い**/
+      reverseMessage() {
+        //alert("reverseMessage"); //１回しか呼ばれない
+        return this.message.split('').reverse().join('');
+      },
+      date() {
+        return Date.now();
+      }
+    },
+    methods: { /**メソッド。呼び出し都度評価される。**/
+      reverseMessageFunc() {
+        //alert("reverseMessageFunc"); //N回呼ばれる。
+        return this.message.split('').reverse().join('');
+      },
+      dateFunc() {
+        return Date.now();
+      }
+    }
+  });
+
+  var app2 = new Vue({
+    el: "#setter-getter",
+    data: {
+      firstName: 'Eiji',
+      lastName: 'Iizuka'
+    },
+    computed :{
+      //算出プロパティにはgetter/setterが指定できる。
+      fullName: {
+        get () {
+          return this.firstName + ' ' + this.lastName;
+        },
+        set(newValue){
+          var names = newValue.split(' ');
+          this.firstName = names[0];
+          if(names.length >1){
+            this.lastName = names[1];
+          }
+
+        }
+      }
+    }
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+<script>
+  //ウォッチャーのサンプル。
+  var app3 = new Vue({
+    el : '#watch-example',
+    data : {
+      question : '',
+      answer : 'I cannot give you an answer until you ask a question'
+    },
+    watch: { /**データの変更を待ち受けて、その処理の状態に応じて状態に更新をかける。このような処理は、watchでプロパティを監視しないとできない**/
+      question(newQuestion){
+        this.answer = 'Waiting for you to stop typing…'
+        this.getAnswer();
+      }
+    },
+    methods :{
+      getAnswer : _.debounce( //debounceの機能。ユーザー入力の完了を遅延してくれる。
+        function(){
+          this.answer = 'Thinking';
+          axios.get('https://yesno.wtf/api')
+            .then(function(response){
+              app3.answer= _.capitalize(response.data.answer);
+            })
+            .catch(function(error){
+              app3.answer = 'Error! Could not reach the API. ' + error;
+            })
+        }
+        ,1000　//遅延時間を指定する。
+      )
+    }
+  });
+</script>
+
+</html>
