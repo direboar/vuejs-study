@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>TITLE</title>
+  <script src="../../js/vuejs/vue.js"></script>
+
+  <!--[if lt IE 9]>
+       <script src = "http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+     <![endif]-->
+</head>
+
+<body>
+  <div id="app1">
+    <!--classの書き換え。以下のようにして、dataの属性on/offにあわせてクラスの追加ができる。-->
+    <span class="static" v-bind:class="{active: isActive, 'text-danger': hasError}">
+      ああああ
+    </span><br/>
+    <button v-on:click="isActive=!isActive">isActive</button> {{isActive}}<br/>
+    <button v-on:click="hasError=!hasError">hasError</button> {{hasError}}<br/>
+    <!--特定のオブジェクトに、クラス名：true/falseで定義し、オブジェクト自体をバインドできる。-->
+    <span v-bind:class="classObject">
+      ああああ
+    </span><br/>
+    <button v-on:click="classObject.active=!classObject.active">isActive</button> {{classObject.active}}<br/>
+    <!--  <button v-on:click="classObject.'text-danger'=!classObject.'text-danger'">'text-danger'</button> {{classObject.'text-danger'}}<br/>-->
+
+    <!--算出プロパティを使う方法。これがおススメらしい。-->
+  </div>
+  <div id="app2">
+    <span v-bind:class="classObject">
+      ああああ
+    </span><br/>
+    <button v-on:click="isActive=!isActive">isActive</button> {{isActive}}<br/>
+    <button v-on:click="error=!error">error</button> {{error}}<br/>
+  </div>
+  <div id="app3">
+    <!--配列構文-->
+    <div v-bind:class="[activeClass,errorClass]">app3</div>
+  </div>
+
+  <!--スタイルの指定も同様。割愛するが、算出プロパティの利用も可能。-->
+  <div id="app4">
+    <!--配列構文-->
+    <div v-bind:style="{color : activeColor , fontSize : fontSize + 'px'}">ああああ</div>
+    フォントサイズ<input v-model="fontSize" />
+  </div>
+
+  <div id="app5">
+    <!--配列構文-->
+    <div v-bind:style="styleObject">ああああ</div>
+  </div>
+
+  <!--コンポーネントの場合のスタイル。後回し。-->
+
+</body>
+<script>
+  var app1 = new Vue({
+    el: '#app1',
+    data: {
+      classObject: {
+        active: true,
+        'text-danger': true
+      },
+      isActive: true,
+      hasError: true
+    }
+  });
+
+  var app2 = new Vue({
+    el : '#app2',
+    data : {
+      isActive: true,
+      error: true
+    },
+    computed :{
+      classObject : function(){
+        return{
+          active : this.isActive && !this.error,
+          'text-danger' : this.error
+        }
+      }
+    }
+  });
+
+  var app3 = new Vue({
+    el : '#app3',
+    data: {
+      activeClass : 'active',
+      errorClass : 'text-danger'
+    }
+  });
+
+  var app4 = new Vue({
+    el : '#app4',
+    data : {
+      activeColor : 'red',
+      fontSize : 30
+    }
+  });
+
+  var app5 = new Vue({
+    el : '#app5',
+    data : {
+      styleObject : {
+        color : 'red',
+        fontSize : '20px'
+      }
+    }
+  });
+
+</script>
+
+</html>
