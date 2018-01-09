@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>TITLE</title>
+  <script src="../../js/vuejs/vue.js"></script>
+
+  <!--[if lt IE 9]>
+       <script src = "http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+     <![endif]-->
+</head>
+
+<body>
+  <a href="https://jp.vuejs.org/v2/guide/conditional.html">条件付きレンダリング</a>を写経。
+
+  <!--v-ifの分岐-->
+  <div id="app1">
+    <h1 v-if="show">
+      show : {{show}}
+    </h1>
+    <h1 v-else>
+      NO.
+    </h1>
+    <input v-model="show"/>
+  </div>
+
+  <!--v-ifで複数要素をまとめて切り替える：templateの利用-->
+  <div id="app2">
+    <template v-if="show">
+      <h1>title</h1>
+      <p>Paragraph 1</p>
+      <p>Paragraph 2</p>
+    </template>
+  </div>
+
+  <!--v-else-if-->
+  <div id="app3">
+    <div v-if="type==='A'">
+      A
+    </div>
+    <div v-else-if="type==='B'">
+      B
+    </div>
+    <div v-else-if="type==='C'">
+      C
+    </div>
+    <div v-else>
+      none.
+    </div>
+    type : <input v-model="type"/ />
+  </div>
+
+ <!--keyによる再利用可能な要素の制御。割愛。-->
+
+ <!--v-show v-ifと同じだが、DOM上に要素が残る。-->
+ <div id="app4">
+   <h1 v-show="show">
+     show : {{show}}
+   </h1>
+   <input v-model="show"/>
+ </div>
+
+ <!--v-if とv-showの選択基準：v-if vs v-showwを参照。-->
+
+</body>
+<script>
+  var app1 = new Vue({
+    el : '#app1',
+    data : {
+      show : true
+    }
+  });
+
+  var app2 = new Vue({
+    el : '#app2',
+    data : {
+      show : false
+    }
+  });
+
+  var app3 = new Vue({
+    el : '#app3',
+    data : {
+      type : 'A'
+    }
+  });
+
+  var app4 = new Vue({
+    el : '#app4',
+    data : {
+      show : true
+    }
+  });
+
+</script>
+
+</html>
