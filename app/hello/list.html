@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>TITLE</title>
+  <script src="../../js/vuejs/vue.js"></script>
+
+  <!--[if lt IE 9]>
+       <script src = "http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+     <![endif]-->
+</head>
+
+<body>
+  <a href="https://jp.vuejs.org/v2/guide/list.html">リストレンダリング</a>を写経。
+
+  <!--v-ifの分岐-->
+  <ul id="app1">
+    リスト1<br />
+    <li v-for="item in items">
+      {{parentMessage}} {{item.message}}  {{item.name}}
+    </li>
+    <hr />
+    リスト2<br />
+    <li v-for="(item,index) in items"> <!--indexが必要な場合-->
+      index : {{index}} : {{item.message}}  {{item.name}}
+    </li>
+    <hr />
+    リスト3<br />
+    <li v-for="item of items"> <!--ofでもinでもいい-->
+      {{parentMessage}} {{item.message}}  {{item.name}}
+    </li>
+    <hr />
+
+    <li v-for="item of items">
+      リスト4<br />
+      <!--配列ではなくオブジェクトを in XXXに指定すると、オブジェクトの属性が列挙される。keyを使うと属性名（連装配列のキー）がでる-->
+      <span v-for="value in item">
+        {{value}}
+      </span>
+    </li>
+    <hr />
+    リスト5<br />
+    <li v-for="item of items">
+      <!--配列ではなくオブジェクトを in XXXに指定すると、オブジェクトの属性が列挙される。keyを使うと属性名（連装配列のキー）がでる-->
+      <span v-for="(key,value) in item">
+        {{key}} : {{value}}
+      </span>
+    </li>
+    <hr />
+
+    リスト6<br />
+    <li v-for="item of filter">
+      {{parentMessage}} {{item.message}}  {{item.name}}
+    </li>
+    filterCondtion : <input v-model="filterCondtion"/>
+    <hr />
+
+    <button v-on:click="add">itemを追加する</button>
+    <!--配列のソート純は監視される。push/pop/shift/unshift/splice/sort/reverse-->
+    <button v-on:click="sort">itemをソートする</button>
+    <!--keyはよくわからなかったのでいったん割愛。-->
+
+  </ul>
+
+  <ul id="app2">
+    v-for と v-if<br />
+    <li v-for="todo in todos" v-if="!todo.isComplete">
+      {{todo.text}}
+    </li>
+  </ul>
+
+  <!--コンポーネントと v-forは割愛-->
+
+</body>
+<script>
+  var app1 = new Vue({
+    el : '#app1',
+    data : {
+      parentMessage : 'Parent',
+      filterCondtion : '',
+      items : [
+        {message : 'foo',name : '飯塚'},
+        {message : 'bar',name : 'エイジ'},
+      ]
+    },
+    computed : {
+      filter(){
+        if(this.filterCondtion == null || this.filterCondtion === ''){
+          return this.items;
+        }else{
+          var app = this;
+          return this.items.filter(
+            function(item){
+              var pattern = new RegExp('^'+app.filterCondtion);
+              return item.message.match(pattern);
+            });
+        }
+      }
+    },
+    methods : {
+      add(){
+        this.items.push({message : 'baz',name : 'あかさた'});
+      },
+      sort(){
+        this.items.sort(function(a,b){
+          a = a.message.toString().toLowerCase();
+          b = b.message.toString().toLowerCase();
+          if(a < b){
+            return -1;
+          }else if(a > b){
+            return 1;
+          }else{
+            return 0;
+          }
+        });
+      }
+    }
+  });
+
+  var app2 = new Vue({
+    el : '#app2',
+    data :{
+      todos : [
+        {text : "TODO1",isComplete : false},
+        {text : "TODO2",isComplete : true},
+        {text : "TODO3",isComplete : true},
+        {text : "TODO4",isComplete : false},
+        {text : "TODO5",isComplete : true},
+      ]
+    }
+
+  });
+
+  // 注意事項
+  //
+  // JavaScript の制限のため、Vue は配列で以下の変更を検出することはできません:
+  // インデックスでアイテムを直接設定するとき。例: vm.items[indexOfItem] = newValue
+  // 配列の長さを変更するとき。例: vm.items.length = newLength
+  // 上記の注意事項 1 に対処するため、以下のどちらも vm.items[indexOfItem] = newValue と同じ動作になりますが、リアクティブなシステム内で状態の更新をトリガします。
+  //
+  // // Vue.set
+  // Vue.set(example1.items, indexOfItem, newValue)
+  //
+  // // Array.prototype.splice
+  // example1.items.splice(indexOfItem, 1, newValue)
+
+
+</script>
+
+</html>
