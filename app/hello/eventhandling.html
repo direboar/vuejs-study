@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>TITLE</title>
+  <script src="../../js/vuejs/vue.js"></script>
+</head>
+
+<body>
+  <a href="https://jp.vuejs.org/v2/guide/events.html">イベントハンドリング</a>
+  <div id="app1">
+    <button v-on:click="inclement">インクリメント(1)</button><br/>
+    <button v-on:click="inclementWith(2)">インクリメント(2)</button><br/>
+    {{counter}}
+  </div>
+
+ <a v-on:click.stop="doThis" href="http://yahoo.co.jp">111</a>
+
+ <div id="app2">
+   <form v-on:submit.stop.prevent="onSubmit" action="http://www.goo.ne.jp">
+     <input type="submit" name="送信(preventDefaultしている)"/ />
+   <form v-on:submit="onSubmit" action="http://www.goo.ne.jp">
+   </form>
+     <input type="submit" name="送信(preventDefaultしていない)"/ />
+   </form>
+   {{counter}}
+
+   <div v-on:click.capture="alert()">
+     aaa<div>子要素を押してもalertでる</dib>
+     </div>
+   </div>
+   <div v-on:click.self="alert()">
+     ccc<div>子要素を押してもalertでない</dib>
+   </div>
+   <button v-on:click.capture="alert()">aaa</button><br/>
+   <button v-on:click.self="alert()">bbb</button><br/>
+
+   <button v-on:click.once="alert()">１回だけ動く</button><br/>
+
+   このページのがわかりやすかった。
+   http://blog.asnpce.com/technology/744
+   <form>
+     <input @keyup.alt.67="alert">
+     <input v-on:keyup.enter="alert"/>
+   </form>
+
+  </div>
+</body>
+
+
+<script>
+  var app1 = new Vue({
+    el: '#app1',
+    data: {
+      counter : 0
+    },
+    methods : {
+      inclement(){
+        this.inclementWith(1);
+        return this.counter;
+      },
+      inclementWith(count){
+        this.counter += count;
+        return this.counter;
+      }
+    }
+  });
+
+  var app2 = new Vue({
+    el : "#app2",
+    data : {
+      counter : 0
+    },methods :{
+      onSubmit(){
+        this.counter++;
+      },
+      alert(){
+        alert('111')
+      }
+    }
+  });
+</script>
+
+</html>
