@@ -20,18 +20,17 @@
  <div id="app2">
    <form v-on:submit.stop.prevent="onSubmit" action="http://www.goo.ne.jp">
      <input type="submit" name="送信(preventDefaultしている)"/ />
-   <form v-on:submit="onSubmit" action="http://www.goo.ne.jp">
    </form>
+   <form v-on:submit="onSubmit" action="http://www.goo.ne.jp">
      <input type="submit" name="送信(preventDefaultしていない)"/ />
    </form>
    {{counter}}
 
    <div v-on:click.capture="alert()">
-     aaa<div>子要素を押してもalertでる</dib>
-     </div>
+     aaa<div>子要素を押してもalertでる</div>
    </div>
    <div v-on:click.self="alert()">
-     ccc<div>子要素を押してもalertでない</dib>
+     ccc<div>子要素を押してもalertでない</div>
    </div>
    <button v-on:click.capture="alert()">aaa</button><br/>
    <button v-on:click.self="alert()">bbb</button><br/>

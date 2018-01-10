@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>TITLE</title>
+  <script src="../../js/vuejs/vue.js"></script>
+</head>
+
+<a href="https://jp.vuejs.org/v2/guide/forms.html">フォーム入力バインディング</a>
+<body>
+  <div id="app1">
+    #テキスト<br />
+    <input v-model="message" placeholder="edit on" />
+    <p>
+      message is : {{message}}
+    </p>
+
+    #複数行テキスト<br />
+    <textarea v-model="messageMultiline" placeholder="add multiple line." ></textarea>
+    <p>
+      message is :<pre>{{messageMultiline}}</pre>
+    </p>
+
+    #チェックボックス<br />
+    <input type="checkbox" id="checkbox" v-model="checked" />
+    <label for="checkbox">{{checked}}</label>
+    <br />
+
+    複数のチェックボックスは、同じ配列に束縛します<br/>
+    <input type="checkbox" id="jack" value="Jack" v-model="checkedNames" />
+    <label for="jack">Jack</label>
+    <input type="checkbox" id="john" value="John" v-model="checkedNames" />
+    <label for="john">John</label>
+    <input type="checkbox" id="mike" value="Mike" v-model="checkedNames" />
+    <label for="mike">Mike</label>
+    <br />
+    <span>Checked names : {{checkedNames}}</span>
+
+    #ラジオボタン<br />
+    <input type="radio" id="one" value="One" v-model="picked" />
+    <label for="one">One</label>
+    <input type="radio" id="two" value="Two" v-model="picked" />
+    <label for="one">Two</label>
+    <br />
+    <span>Picked : {{picked}}</span>
+
+    #選択（SelectBox)<br />
+    <select v-model="selected">
+      <option disabled value="">Please Select One</option>
+      <option >A</option>
+      <option >B</option>
+      <option >C</option>
+    </select>
+    <span>Selected : {{selected}}</span>
+    <br/>
+    <select v-model="selectedDynamic">
+      <option v-for="option in options" v-bind:value="option.value"> <!--Vue インスタンスの動的プロパティに値を束縛するケース。v-bindでvalueに束縛する-->
+        {{option.text}}
+      </option>
+    </select>
+    <span>selectedDynamic : {{selectedDynamic}}</span>
+    <br/>
+
+    #チェックボックス(値のバインディング)<br />
+    <input type="checkbox" v-model="toggle" true-value="yes" false-value="no" /> <!--true-value,false-valueはモデルへの反映値に過ぎない。formのvalueには反映されない。-->
+    <br />
+    <span>toggle : {{toggle}}</span>
+
+    #その他、値をVueインスタンスと紐づける例はサンプル見れ。
+
+　　TODO : 修飾子
+
+  </div>
+</body>
+
+
+<script>
+  var app1 = new Vue({
+    el: '#app1',
+    data: {
+      message : "",
+      messageMultiline : "",
+      checked : false,
+      checkedNames : [],
+      picked : "",
+      selected : "",
+      selectedDynamic : "",
+      toggle : 'no',
+      pick : ''
+      options :[
+        {text : 'One' , value : 'A',selected : false},
+        {text : 'Two' , value : 'B',selected : false},
+        {text : 'Three' , value : 'C',selected : true}
+      ]
+    }
+  });
+
+</script>
+
+</html>
