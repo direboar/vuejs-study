@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled Document</title>
+  <script src="../../../js/vuejs/vue.js"></script>
+</head>
+
+<body>
+  <a href="https://jp.vuejs.org/v2/guide/components.html">コンポーネントの構成（プロパティ）</a>
+  <hr/>
+  <div id="app1">
+    <!--宣言したプロパティは、タグの属性として文字列として渡すことができる。-->
+    <child message="hello,world"></child><br/>
+    <child message="goodby,world"></child><br/>
+    <child2 my-message="goodby,world"></child2><br/>
+  </div>
+  <div id="app2">
+    <input v-model="parentMsg"/><br/>
+    <!--親のデータをバインディングする場合はv-bindを使用する。これはapp2のデータをコンポーネントのmessageにバインドする例。-->
+    <child v-bind:message="parentMsg"></child></br>
+    <child :message="parentMsg"></child></br>
+  </div>
+  <div id="app3">
+    <ol>
+      <!--v-bindにプロパティを指定しなかった場合、指定したオブジェクトが全部渡される。-->
+      <todo-item v-bind="todo"></todo-item>
+      <!--上と下は等価である。-->
+      <todo-item :text="todo.text" :is-complete="todo.isComplete"></todo-item>
+    </ol>
+
+    <!--リテラル構文を使って値を渡すと文字列になる。-->
+    <number-sample counter='1'></number-sample>
+    <!--JavaScriptの数値を渡したい場合は、v-bindを使う。-->
+    <number-sample :counter='1'></number-sample>
+  </div>
+</body>
+
+<script language="JavaScript">
+  //コンポーネントにプロパティを定義する。
+  Vue.component('child', {
+    //プロパティの宣言
+    props: ['message'],
+    template: '<span>{{message}}</span>'
+  });
+  Vue.component('child2', {
+    //プロパティの宣言
+    props: ['myMessage'],
+    //キャメルケースは、HTMLのタグ上はケバブケース（ハイフン区切り小文字）となる。
+    template: '<span>{{myMessage}}</span>'
+  });
+  Vue.component('todo-item',{
+    props : ['text','isComplete'],
+    template : '<li>{{text}} : {{isComplete}}</li>'
+  });
+  Vue.component('number-sample',{
+    props : ['counter'],
+    template : '<button>{{counter+5}} </button>',
+  });
+
+  //Vueルートを生成。
+  var app1 = new Vue({
+    el: '#app1'
+  });
+
+  var app2 = new Vue({
+    el: '#app2',
+    data: {
+      parentMsg: ''
+    }
+  });
+
+  var app3 = new Vue({
+    el: '#app3',
+    data: {
+      todo : {text : 'タスク1' , isComplete : false }
+    }
+  });
+
+</script>
+
+</html>

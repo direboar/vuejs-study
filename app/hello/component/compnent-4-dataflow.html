@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled Document</title>
+  <script src="../../../js/vuejs/vue.js"></script>
+</head>
+
+<body>
+  <a href="https://jp.vuejs.org/v2/guide/components.html">単方向データフロー</a>
+  <hr/>
+  <div id="app1">
+    <!--宣言したプロパティは、タグの属性として文字列として渡すことができる。-->
+    <child :initial-counter="10"></child><br/>
+    <child :initial-counter="20"></child><br/>
+
+    <input v-model="text" /><br />
+    <length :text="text"></length>
+  </div>
+</body>
+
+<script language="JavaScript">
+  //コンポーネントにプロパティを定義する。
+  Vue.component('child', {
+    //プロパティの宣言
+    props: ['initialCounter'],
+    //プロパティで初期値をもらい、その後各コンポーネント内で値を更新する場合は、初期値を元にdataを生成する。
+    //(propsを直接更新すると親コンポーネントの値が更新されるが、依存関係が双方向になるのでNG.イベントを使う。)
+    data(){
+      return{
+        counter : this.initialCounter
+      }
+    },
+    template: '<button @click="inclement">{{counter}}</button>',
+    methods :{
+      inclement(){
+        return this.counter++;
+      }
+    }
+  });
+  Vue.component('length', {
+    //プロパティの宣言
+    props: ['text'],
+    //プロパティで初期値をもらい、編集して出したい場合は導出プロパティを使う。
+    computed : {
+      normalizedText(){
+        return this.text.trim().toLowerCase();
+      }
+    },
+    template: '<pre>{{normalizedText}}</pre>'
+  });
+
+  //Vueルートを生成。
+  var app1 = new Vue({
+    el: '#app1',
+    data: {
+      text : ''
+    }
+  });
+
+</script>
+
+</html>

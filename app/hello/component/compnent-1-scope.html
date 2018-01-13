@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Untitled Document</title>
+    <script src="../../../js/vuejs/vue.js"></script>
+</head>
+
+<body>
+  <a href="https://jp.vuejs.org/v2/guide/components.html">コンポーネントのローカル登録・グローバル登録</a>
+    <hr/>
+    <div id="app1">
+      <my-component></my-component>
+      <local-component></local-component>
+    </div>
+    <div id="app2">
+      <my-component></my-component>
+      <!--local-component></local-component--> <!-- local-componentはローカル登録されるので、app2からは参照されない。 -->
+    </div>
+</body>
+
+<script language="JavaScript">
+  //カスタムコンポーネントをグローバルに登録。Vueのルートインスタンス生成前に登録。
+  Vue.component('my-component', {
+    template : '<div>A custom component!</div>'
+  });
+
+　//ローカル登録をする場合は、Vueインスタンスのインスタンスオプションに設定する。
+  //1.コンポーネントの属性を持つオブジェクトを生成。
+  var localComp = {
+    template : '<div>コンポーネントのローカル登録の例です。</div>'
+  }
+
+  //Vueルートを生成。
+  var app1 = new Vue({
+    el : '#app1',
+    //コンポーネントのローカル登録。
+    components : {
+      'local-component' : localComp
+    }
+  });
+
+  var app2 = new Vue({
+    el : '#app2'
+  });
+</script>
+
+</html>

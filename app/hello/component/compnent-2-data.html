@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Untitled Document</title>
+    <script src="../../../js/vuejs/vue.js"></script>
+</head>
+
+<body>
+  <a href="https://jp.vuejs.org/v2/guide/components.html">コンポーネントのデータは関数でなければならない</a>
+    <hr/>
+    <div id="app1">
+      <simple-counter-samedata></simple-counter-samedata>
+      <simple-counter-samedata></simple-counter-samedata>
+      <simple-counter-samedata></simple-counter-samedata>
+      <br/>
+      <simple-counter></simple-counter>
+      <simple-counter></simple-counter>
+      <simple-counter></simple-counter>
+    </br/>
+    </div>
+</body>
+
+<script language="JavaScript">
+  //dataがfunctionで返却することを示す例。templateはtemplateで一つのインスタンスしか持たないので、
+  //テンプレートでオブジェクトを共有してしまう。
+  var data = {counter : 0};
+  Vue.component('simple-counter-samedata', {
+    data : function(){
+      return data;
+    }
+    ,methods :{
+      inclement(){
+        return this.counter++;
+      }
+    }
+    ,
+    template : '<button v-on:click="inclement">{{counter}}</button>'
+  });
+
+  //以下のようにすればコンポーネントのインスタンスごとにdataが生成されるので、値は共有されない。
+  Vue.component('simple-counter', {
+    data : function(){
+      return {
+        counter : 0
+      }
+    }
+    ,methods :{
+      inclement(){
+        return this.counter++;
+      }
+    },
+    template : '<button v-on:click="inclement">{{counter}}</button>'
+  });
+
+
+  //Vueルートを生成。
+  var app1 = new Vue({
+    el : '#app1'
+  });
+
+</script>
+
+</html>

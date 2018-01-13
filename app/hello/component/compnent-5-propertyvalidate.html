@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled Document</title>
+  <script src="../../../js/vuejs/vue.js"></script>
+</head>
+
+<body>
+  <a href="https://jp.vuejs.org/v2/guide/components.html">プロパティ検証</a>
+  <hr/>
+  <div id="app1">
+    <validate-example :prop-a="10" prop-b="20" prop-c="30" :prop-f="100"></validate-example>
+  </div>
+</body>
+
+<script language="JavaScript">
+  Vue.component('validate-example', {
+    props : {
+      //プロパティに肩を定義したり、バリデータを定義することで誤った使い方をした際警告を出す。
+      propA : Number,
+      propB : [String,Number],
+      propC : {
+        type : String,
+        required : true
+      },
+      propD : {
+        type : Number,
+        default : 100
+      },
+      propE : {
+        type : Object,
+        default(){
+          return {message : 'hello'}
+        }
+      },
+      propF : {
+        validator(value){
+          return value > 10
+        }
+      }
+    },
+    template : '<pre>{{propA}},{{propB}},{{propC}},{{propD}},{{propE.message}},{{propF}}</pre>'
+  });
+
+  //Vueルートを生成。
+  var app1 = new Vue({
+    el: '#app1'
+  });
+
+</script>
+
+</html>
