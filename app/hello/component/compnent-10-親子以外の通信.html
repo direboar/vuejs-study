@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled Document</title>
+  <script src="../../../js/vuejs/vue.js"></script>
+</head>
+
+<body>
+  <a href="https://jp.vuejs.org/v2/guide/components.html">親子間以外の通信</a>
+  <hr/>
+  <div id="app1">
+    <button-counter></button-counter><br/>
+    <message-span></message-span>
+  </div>
+</body>
+
+<script language="JavaScript">
+  var bus = new Vue();
+
+  Vue.component('button-counter',{
+    template : '<button @click="sayHello()">SayHello!</button>',
+    methods : {
+      sayHello(){
+        bus.$emit('hello', 'Hello,world')
+      }
+    }
+  });
+  Vue.component('message-span',{
+    template : '<button @click="replace">{{message}}</button>',
+    data(){
+      return {
+        message : '1'
+      }
+    },
+    created: function() {
+      //(おそらく)thisがbusに束縛されてしまうので、代入が必要。
+      var self = this;
+      bus.$on('hello',function(receivedMessage){
+          self.message = receivedMessage;
+      });
+    },methods: {
+      replace(){
+        alert();
+        this.message = 'GG';
+      }
+    }
+  });
+  var app1 = new Vue({
+    el : '#app1'
+  });
+
+</script>
+
+</html>

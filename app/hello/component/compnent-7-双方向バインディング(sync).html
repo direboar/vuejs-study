@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled Document</title>
+  <script src="../../../js/vuejs/vue.js"></script>
+</head>
+
+<body>
+  <a href="https://jp.vuejs.org/v2/guide/components.html">sync修飾子</a>
+  <hr/>
+  <div id="app1">
+    <p>{{counter}}</p>
+    <!--親子で双方向バインディングする属性を受け取る場合は.sync修飾子をつけて子コンポーネントに渡す。-->
+    <button-counter :count.sync="counter"></button-counter>
+  </div>
+</body>
+
+<script language="JavaScript">
+  Vue.component('button-counter',{
+    //コンポーネントで受け取る値は、propsで定義する。
+    props : ['count'],
+    template : '<button @click="inclementCounter()">{{count}}</button>',
+    methods : {
+      inclementCounter(){
+        //.syncで渡されたプロパティの更新は、update:<プロパティ名>で行う。実際は親コンポーネントにイベントを送って値を更新してる。
+        this.$emit('update:count', this.count+1)
+      }
+    }
+  });
+
+  var app1 = new Vue({
+    el : '#app1',
+    data : {
+      counter : 10
+    }
+  });
+
+</script>
+
+</html>

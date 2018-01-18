@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled Document</title>
+  <script src="../../../js/vuejs/vue.js"></script>
+</head>
+
+<body>
+  <a href="https://jp.vuejs.org/v2/guide/components.html">カスタムイベント</a>
+  <hr/>
+  <div id="app1">
+    <p>{{total}}</p>
+    <!--inclementCounterで発行した[inclement]イベントを購読し、VueインスタンスのinclementTotalを呼ぶ。-->
+    <button-counter @inclement="inclementTotal()"></button-counter>
+    <button-counter @inclement="inclementTotal()"></button-counter>
+    <button-counter @inclement="inclementTotal()"></button-counter>
+  </div>
+</body>
+
+<script language="JavaScript">
+  Vue.component('button-counter',{
+    template : '<button @click="inclementCounter()">{{counter}}</button>',
+    data(){
+      return {
+        counter : 0
+      }
+    },
+    methods : {
+      inclementCounter(){
+        this.counter++;
+        this.$emit('inclement'); //inclementイベントを発行する。イベントの購読は、コンポーネント地震でもできるし親でもできる。
+      }
+    }
+  });
+
+  var app1 = new Vue({
+    el : '#app1',
+    data : {
+      total : 0
+    },
+    methods :{
+      inclementTotal(){
+        return this.total++;
+      }
+    }
+  });
+
+</script>
+
+</html>
