@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled Document</title>
+  <script src="../../../js/vuejs/vue.js"></script>
+</head>
+
+<body>
+  <a href="https://jp.vuejs.org/v2/guide/components.html">スロットによるコンテンツ配信</a>
+  <hr/>
+  <div id="app1">
+    <my-component>
+      <h2>スロットに挿入する本文です。</h2>
+      <p>ああああ</p>
+      <p>いいいい</p>
+    </my-component>
+
+    <app-layout>
+      <h1 slot="header">これはタイトルです。</h1>
+      <p>これはパラグラフの本文です。</p>
+      <p slot="footer">これはフッターです。</p>
+    </app-layout>
+
+    <div class="parent">
+      <child>
+        <template slot-scope="props"> <!--template要素で、子コンポーネントが親コンポーネントに渡したデータをスロットスコープで受け取る。-->
+          <span>スロットスコープのサンプルです。この文章は親コンポーネントで指定したメッセージです。</span><br/>
+          <span>{{props.text}}</span><!--受け取った値は、slot-scope属性で指定した値で受け取れる。-->
+        </template>
+      </child>
+    </div>
+
+    <!--スロットスコープを使ったリストのサンプルです。-->
+    <awesome-list v-bind:items="myitems">
+      <!--awesome-listで生成された各スロットを、以下のタグに割り当てます。各行ごとに生成されたスロットのコンテンツは、slot-scopeで受け取ります。-->
+      <li slot="item"
+          slot-scope="props"
+          class="my-fancy-item">
+          {{props.text}}
+      </li>
+    </awesome-list>
+
+    <awesome-list v-bind:items="myitems">
+      <!--こんな風に表示方法を親コンテンツでカスタマイズできます-->
+      <h3 slot="item"
+          slot-scope="props"
+          class="my-fancy-item">
+          {{props.text}}
+      </h3>
+    </awesome-list>
+
+  </div>
+</body>
+
+<script language="JavaScript">
+  //<slot>タグで囲った箇所は、componentを利用する側で指定されたコンテンツに置き換わる。
+  Vue.component('my-component', {
+    template: '\
+    <div>\
+      <h1>単一スロット・コンポーネントのタイトルです</h1>\
+      <slot>スロットに挿入されます。</slot>\
+    </div>\
+    '
+  });
+
+  Vue.component('app-layout', {
+    template: '\
+    <div class="container">\
+    　名前付きコンポーネントの実験です。\
+      <header>\
+        <slot name="header">ヘッダ、フッタのスロットには名前がついており親コンテンツで指定した名前のコンテンツ埋め込まれます</slot>\
+      </header>\
+      <main>\
+        <slot>名前なしのスロットをデフォルトスロットとして用意できます。</slot>\
+      </main>\
+      <footer>\
+        <slot name="footer"></slot>\
+      </footer>\
+    </div>\
+    '
+  });
+
+  Vue.component('child', {
+    //slotタグのtext属性は、スロットスコープとして親コンポーネントに渡せます。
+    template: '\
+    <div class="child"> \
+      <slot text="この文章はスロットで指定した（子コンポーネントの）値です">スロットスコープのサンプルです。</slot>\
+    </div>\
+    '
+  })
+
+  //リストのコンテンツを親でカスタマイズできる用にスロットスコープを使用する例です。
+  //スロットのtextにスロットスコープで値を指定しています。
+  Vue.component('awesome-list',{
+    props : ['items'],
+    template : '\
+    <ul>\
+     <slot name="item"\
+      v-for="item in items"\
+      :text="item.text">\
+      <!--フォールバックコンテンツはここへ-->\
+     </slot>\
+    </ul>\
+    '
+  });
+
+
+  var app1 = new Vue({
+    el: '#app1',
+    data : {
+      myitems : [
+        {name : '111',text :'あああ'},
+        {name : '222',text :'いいい'},
+        {name : '333',text :'ううう'},
+      ]
+    }
+  });
+</script>
+
+</html>
