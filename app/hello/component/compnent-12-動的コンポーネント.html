@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled Document</title>
+  <script src="../../../js/vuejs/vue.js"></script>
+</head>
+
+<body>
+  <a href="https://jp.vuejs.org/v2/guide/components.html">動的コンポーネント</a>
+  <hr/>
+  <div id="app1">
+    <!--コンポーネントを入れ替える場所に「v-bind:is」を定義。値にコンポーネント名を指定。-->
+    <component v-bind:is="currentView" :profile.sync="profile"></component>
+
+    <!--keep-aliveを指定すると、コンポーネントが切り替わっても切り替え前の値が保存される。-->
+    <keep-alive>
+      <component v-bind:is="currentView" :profile.sync="profile"></component>
+    </keep-alive>
+    <select v-model="currentView">
+      <option v-for="view in views">{{view}}</option>
+    </select>
+  </div>
+</body>
+
+<script language="JavaScript">
+  //<slot>タグで囲った箇所は、componentを利用する側で指定されたコンテンツに置き換わる。
+  var profileviewer = {
+    props :['profile'],
+    template: '\
+    <div>\
+      <p>名前：{{profile.name}}</p>\
+      <p>年齢：{{profile.age}}</p>\
+    </div>\
+    '
+  };
+
+  //TIPS モデル毎v-bind.syncで更新する例を作成してみたので参考まで。
+  //refを指定すると、this.$refsで対象のDOM要素を取得できる。
+  var profileeditor = {
+    props :['profile'],
+    template: '\
+    <div>\
+      名前：<input ref="name" :value="profile.name"></input><br/>\
+      年齢：<input ref="age" :value="profile.age"></input>\
+      <button @click="update">更新</button>\
+    </div>\
+    ',
+    methods :{
+      update(){
+        var updateprofile={
+          name : this.$refs.name.value,
+          age : this.$refs.age.value,
+        };
+        this.$emit('update:profile',updateprofile);
+      }
+    }
+  };
+  var components = {
+    'profileviewer':profileviewer,
+    'profileeditor':profileeditor
+  };
+
+  var app1 = new Vue({
+    el: '#app1',
+    components : components,
+    data : {
+      currentView : 'profileviewer', //v-bind:isに指定する現在のView名を指定。
+      views : Object.keys(components),
+      profile : {
+        name : '田中康人',
+        age : 21
+      }
+    }
+  });
+</script>
+
+</html>
