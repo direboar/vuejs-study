@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>TITLE</title>
+  <script src="../../js/vuejs/vue.js"></script>
+  <script src="../../js/vue-router/vue-router.js"></script>
+</head>
+
+<body>
+  <a href="http://gihyo.jp/dev/serial/01/vuejs/0004?page=2">ネストされたルート</a>
+  <div id="app1">
+    <router-link to="/top">トップページ</router-link>
+    <router-link to="/users">ユーザー一覧ページ</router-link><br/>
+    <router-link to="/user/111">ユーザー111</router-link><br/>
+    <router-link to="/user/222">ユーザー222</router-link><br/>
+    <router-view></router-view>
+  </div>
+</body>
+
+<script type="text/x-template" id="user-template">
+  <div class="user">
+    <h2>ユーザーIDは{{$route.params.userId}}です</h2>
+    <router-link :to="'/user/' + $route.params.userId + '/profile'">ユーザーのプロファイルページを見る</router-link>
+    <router-link :to="'/user/' + $route.params.userId + '/posts'">ユーザーの投稿ページを見る</router-link>
+    <!--ネストされたルート。-->
+    <router-view></router-view>
+  </div>
+</script>
+
+<script>
+  var id = "1111";
+  var user = {
+    template: '#user-template'
+  };
+
+  var userProfile = {
+    template: '\
+    <div class="user-profile">\
+      <h3>こちらはユーザーID{{$route.params.userId}}のプロファイルページです</h3>\
+    </div>\
+    '
+  };
+
+  var userPosts = {
+    template: '\
+    <div class="user-profile">\
+      <h3>こちらはユーザーID{{$route.params.userId}}の投稿ページです</h3>\
+    </div>\
+    '
+  };
+
+  var users = {
+    template: '<div>ユーザー一覧ページです</div>'
+  };
+
+  var router = new VueRouter({
+    routes: [{
+        path: '/top',
+        component: {
+          template: '<div>トップページです</div>'
+        }
+      },
+      {
+        path: '/users',
+        component: users
+      }
+      ,
+      {
+        path: '/user/:userId',
+        name: 'user', //ルートに名前を付けると、URLではなく名前と引数で呼べるようになる。
+        component: user,
+        //ネストされ多ルートに対して割り当てるコンポーネントの定義。
+        //この定義の場合/user/:userId/profileに対して割り当てられる。
+        //以下が表示されるのは、/user/:userId'が表示したテンプレート上に定義された<viww-router>タグ。
+        children: [{
+            path: 'profile',
+            component: userProfile
+          },
+          {
+            path: 'posts',
+            component: userPosts
+          }
+        ]
+      }
+    ]
+  });
+
+  var app1 = new Vue({
+    router: router,
+    el: '#app1'
+  });
+</script>
+
+</html>

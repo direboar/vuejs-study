@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>TITLE</title>
+  <script src="../../js/vuejs/vue.js"></script>
+  <script src="../../js/vue-router/vue-router.js"></script>
+</head>
+
+<body>
+  <a href="http://gihyo.jp/dev/serial/01/vuejs/0004?page=2">名前付きルート</a>
+  <div id="app1">
+    <router-link to="/top">トップページ</router-link><!--ルーターの線妃は<router-link>で指定できる。--><br/>
+    <router-link to="/users">ユーザー一覧ページ</router-link><br/>
+
+    <!--名前とパラメータを指定して表示できる。-->
+    <router-link :to="{ name: 'user', params: { userId: 123 }}">User</router-link>
+
+    <router-view>URLがマッチしたコンポーネントはここに表示されます。</router-view><br/>
+  </div>
+</body>
+
+<script>
+  var users = {
+    template : '<div>ユーザー一覧ページです</div>'
+  };
+
+  var router = new VueRouter({
+    routes:[
+      {
+        path : '/top',
+        component : {
+          template : '<div>トップページです</div>'
+        }
+      },
+      {
+        path : '/users',
+        component : users
+      },
+      {
+        path : '/user/:userId',
+        name : 'user', //ルートに名前を付けると、URLではなく名前と引数で呼べるようになる。
+        component : {
+          template : '<div>ユーザーIDは{{$route.params.userId}}です。</div>'
+        }
+      }
+    ]
+  });
+
+  var app1 = new Vue({
+    router : router,
+    el: '#app1'
+  });
+</script>
+
+</html>

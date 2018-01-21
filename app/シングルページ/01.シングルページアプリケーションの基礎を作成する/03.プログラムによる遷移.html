@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>TITLE</title>
+  <script src="../../js/vuejs/vue.js"></script>
+  <script src="../../js/vue-router/vue-router.js"></script>
+</head>
+
+<body>
+  <a href="http://gihyo.jp/dev/serial/01/vuejs/0004?page=2">プログラムによる遷移</a>
+  <div id="app1">
+    <router-link to="/top">トップページ</router-link><!--ルーターの線妃は<router-link>で指定できる。--><br/>
+    <router-link to="/users">ユーザー一覧ページ</router-link><br/>
+    <router-view>URLがマッチしたコンポーネントはここに表示されます。</router-view><br/>
+    <select v-model="userId">
+      <option v-for="user in users" :value="user.id">{{user.name}}</option>
+    </select>
+    <button @click="showUser"/>ユーザー表示</button>
+    {{userId}}
+  </div>
+</body>
+
+<script>
+  var users = {
+    template : '<div>ユーザー一覧ページです</div>'
+  };
+
+  var router = new VueRouter({
+    routes:[
+      {
+        path : '/top',
+        component : {
+          template : '<div>トップページです</div>'
+        }
+      },
+      {
+        path : '/users',
+        component : users
+      },
+      {
+        path : '/user/:userId',
+        name : 'user', //ルートに名前を付けると、URLではなく名前と引数で呼べるようになる。
+        component : {
+          template : '<div>ユーザーIDは{{$route.params.userId}}です。</div>'
+        }
+      }
+    ]
+  });
+
+  var app1 = new Vue({
+    router : router,
+    el: '#app1',
+    data :{
+      userId : '1111',
+      users : [
+        {id : 1111,name : '山田'},
+        {id : 2222,name : '田中'},
+        {id : 3333,name : '三島'},
+      ]
+    },methods : {
+      showUser(){
+        alert(this.userId);
+        //プログラムによるナビゲーションができます。
+        //名前付きでもURLでもできる。
+        //https://router.vuejs.org/ja/essentials/navigation.html
+        router.push(
+          {
+            name : 'user',
+            params : {
+              userId : this.userId
+            }
+          }
+        );
+      }
+    }
+  });
+</script>
+
+</html>

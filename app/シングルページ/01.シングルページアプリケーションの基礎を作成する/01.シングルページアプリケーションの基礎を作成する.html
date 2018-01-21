@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>TITLE</title>
+  <script src="../../js/vuejs/vue.js"></script>
+  <script src="../../js/vue-router/vue-router.js"></script>
+</head>
+
+<body>
+  <a href="http://gihyo.jp/dev/serial/01/vuejs/0004">シングルページアプリケーションの基礎を作成する</a>
+  <div id="app1">
+    <router-link to="/top">トップページ</router-link><!--ルーターの線妃は<router-link>で指定できる。--><br/>
+    <router-link to="/users">ユーザー一覧ページ</router-link><br/>
+    <router-link to="/user/1111">ユーザー1111のページ</router-link><br/>
+    <a href="/top">aaa</a><!--S当たり前だがPAとしての相対パス出かけないので、router-linkに意味が出てくる-->
+    <router-view>URLがマッチしたコンポーネントはここに表示されます。</router-view><br/>
+  </div>
+</body>
+
+<script>
+  var users = {
+    template : '<div>ユーザー一覧ページです</div>'
+  };
+
+  //ルートオプションを渡してルーターインスタンスを生成します。
+  //各ルートにコンポーネントをマッピングします。コンポーネントはVue.extendsによって生成されたコンポーネントコンストラクタでも、
+  //コンポーネントオブジェクトのオブジェクトでもよい。
+  var router = new VueRouter({
+    //mode: 'history', historyを設定すると HTML5 Historyモードで動く。Chromeでうまく動かないので後回し。。
+    //https://router.vuejs.org/ja/essentials/history-mode.html
+    routes:[
+      {
+        path : '/top',
+        component : {
+          template : '<div>トップページです</div>'
+        }
+      },
+      {
+        path : '/users',
+        component : users
+      },
+      //ユーザーIDをURLに含むなど、パターン・マッチングする場合URLに:をつける。
+      //以下の例で:userIDは$route.paramsから取得することができる。
+      {
+        path : '/user/:userId',
+        component : {
+          template : '<div>ユーザーIDは{{$route.params.userId}}です。</div>'
+        }
+      }
+    ]
+  });
+
+  var app1 = new Vue({
+    router : router,
+    el: '#app1'
+  });
+</script>
+
+</html>
