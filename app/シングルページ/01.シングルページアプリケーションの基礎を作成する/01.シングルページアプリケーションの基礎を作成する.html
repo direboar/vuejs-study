@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <title>TITLE</title>
-  <script src="../../js/vuejs/vue.js"></script>
-  <script src="../../js/vue-router/vue-router.js"></script>
+  <script src="../../../js/vuejs/vue.js"></script>
+  <script src="../../../js/vue-router/vue-router.js"></script>
 </head>
 
 <body>
@@ -13,8 +13,6 @@
   <div id="app1">
     <router-link to="/top">トップページ</router-link><!--ルーターの線妃は<router-link>で指定できる。--><br/>
     <router-link to="/users">ユーザー一覧ページ</router-link><br/>
-    <router-link to="/user/1111">ユーザー1111のページ</router-link><br/>
-    <a href="/top">aaa</a><!--S当たり前だがPAとしての相対パス出かけないので、router-linkに意味が出てくる-->
     <router-view>URLがマッチしたコンポーネントはここに表示されます。</router-view><br/>
   </div>
 </body>

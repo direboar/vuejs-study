@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>TITLE</title>
+  <script src="../../../js/vuejs/vue.js"></script>
+  <script src="../../../js/vue-router/vue-router.js"></script>
+</head>
+
+<body>
+  <a href="http://gihyo.jp/dev/serial/01/vuejs/0004?page=2">ネストされたルート</a>
+  <div id="app1">
+    <router-link to="/top">トップページ</router-link>
+    <router-link to="/users">ユーザー一覧ページ</router-link><br/>
+    <router-view></router-view>
+  </div>
+</body>
+
+<script type="text/x-template" id="user-list">
+  <div>
+    <div class="loading" v-if="loading">ロード中…</div>
+    <div v-if="error" class="error">
+      {{error}}
+    </div>
+    <div v-for="user in users" :key="user.id">
+      <h2>{{user.name}}</h2>
+    </div>
+  </div>
+</script>
+<!--:key …　https://jp.vuejs.org/v2/guide/list.html#key-->
+
+<script type="text/x-template" id="user-template">
+  <div class="user">
+    <h2>ユーザーIDは{{$route.params.userId}}です</h2>
+    <router-link :to="'/user/' + $route.params.userId + '/profile'">ユーザーのプロファイルページを見る</router-link>
+    <router-link :to="'/user/' + $route.params.userId + '/posts'">ユーザーの投稿ページを見る</router-link>
+    <!--ネストされたルート。-->
+    <router-view></router-view>
+  </div>
+</script>
+
+<script>
+  var getUsers = function(callback) {
+    setTimeout(function() {
+      callback(null, [{
+          id: '001',
+          name: '田中一郎'
+        },
+        {
+          id: '002',
+          name: '緋村剣心'
+        }
+      ])
+    }, 1000);
+  };
+
+  var userList = {
+    template: '#user-list',
+    data() {
+      return {
+        loading: false,
+        users() {
+          return []
+        },
+        error: null
+      }
+    },
+    created() {
+      this.fetchData();
+    },
+    watch: {
+      '$route': 'fetchData'
+    },
+    methods: {
+      fetchData: function() {
+        this.loading = true;
+        getUsers(
+          (function(err, users) {
+            this.loading = true;
+            if (err) {
+              this.error = err.toString();
+            } else {
+              this.users = users;
+            }
+          }).bind(this) //https://qiita.com/hosomichi/items/e11ad0c4ea79db2dee84
+        )
+      }
+    }
+  }
+
+  // var user = {
+  //   template: '#user-template'
+  // };
+  //
+  // var userProfile = {
+  //   template: '\
+  //   <div class="user-profile">\
+  //     <h3>こちらはユーザーID{{$route.params.userId}}のプロファイルページです</h3>\
+  //   </div>\
+  //   '
+  // };
+  //
+  // var userPosts = {
+  //   template: '\
+  //   <div class="user-profile">\
+  //     <h3>こちらはユーザーID{{$route.params.userId}}の投稿ページです</h3>\
+  //   </div>\
+  //   '
+  // };
+
+  var users = {
+    template: '<div>ユーザー一覧ページです</div>'
+  };
+
+  var router = new VueRouter({
+    routes: [{
+        path: '/top',
+        component: {
+          template: '<div>トップページです</div>'
+        }
+      },
+      {
+        path: '/users',
+        component: userList,
+        beforeEnter : (to,from,next) =>{
+          // alert(to.query)
+          // alert(to.query.redirect)
+          // alert(to.euery===undefined)
+          // alert(to.euery.redirect === 'true')
+          if(to.query === undefined){
+            next();
+          }else if(to.euery.redirect === 'true'){
+            next('top')
+          }else{
+            next()
+          }
+        }
+      }
+      // ,
+      // {
+      //   path: '/user/:userId',
+      //   name: 'user', //ルートに名前を付けると、URLではなく名前と引数で呼べるようになる。
+      //   component: user,
+      //   //ネストされ多ルートに対して割り当てるコンポーネントの定義。
+      //   //この定義の場合/user/:userId/profileに対して割り当てられる。
+      //   //以下が表示されるのは、/user/:userId'が表示したテンプレート上に定義された<viww-router>タグ。
+      //   children: [{
+      //       path: 'profile',
+      //       component: userProfile
+      //     },
+      //     {
+      //       path: 'posts',
+      //       component: userPosts
+      //     }
+      //   ]
+      // }
+    ]
+  });
+
+  //グローバルのフック関数 /usersに遷移した場合、強制的に/toにリダイレクト。
+  //アプリとしては正しく動作しない例なのでコメントアウト。
+  // router.beforeEach((to,from,next)=>{
+  //   if(to.path === '/users'){
+  //     next('top')
+  //   }else {
+  //     next()
+  //   }
+  // });
+
+  var app1 = new Vue({
+    router: router,
+    el: '#app1'
+  });
+</script>
+
+</html>
