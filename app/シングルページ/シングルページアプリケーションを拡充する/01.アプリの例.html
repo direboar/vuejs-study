@@ -13,6 +13,7 @@
   <div id="app1">
     <router-link to="/top">トップページ</router-link>
     <router-link to="/users">ユーザー一覧ページ</router-link><br/>
+    <router-link to="/users?redirect=true">ユーザー一覧ページ（リダイレクト）</router-link><br/>
     <router-view></router-view>
   </div>
 </body>
@@ -24,7 +25,7 @@
       {{error}}
     </div>
     <div v-for="user in users" :key="user.id">
-      <h2>{{user.name}}</h2>
+      <h2><router-link :to="'user/'+user.id">{{user.name}}</router-link></h2>
     </div>
   </div>
 </script>
@@ -40,7 +41,44 @@
   </div>
 </script>
 
+<script type="text/x-template" id="login">
+  <div class="login">
+    <h2>ログイン画面</h2>
+    <p v-if="$route.query.redirect">
+      ログインして下さい。
+    </p>
+    <form @submit.prevent="login">
+      <label><input v-model="email" placeholder="email" /></label>
+      <label><input v-model="pass" placeholder="password" /></label>
+      <button type="submit">ログイン</button>
+      <p v-if="error" class="error">ログインに失敗しました。</p>
+    </form>
+  </div>
+</script>
+
 <script>
+　//認証モジュール
+  var Auth = {
+    login(email,pass,cb){
+      setTimeout(function(){
+        if(email === 'vue@example.com' && pass === 'vue'){
+          //ログイン成功時はローカルストレージにトークンを保存
+          localStorage.token = Math.random().toString(36).substring(7);
+          if(cb) cb(true);
+        }else{
+          if(cb) {cb(false)};
+        }
+      },0);
+    },
+
+    logout(){
+      delete localStorage.token;
+    },
+    loggedIn(){
+      return !!localStorage.token
+    }
+  }
+
   var getUsers = function(callback) {
     setTimeout(function() {
       callback(null, [{
@@ -83,38 +121,47 @@
             } else {
               this.users = users;
             }
-          }).bind(this) //https://qiita.com/hosomichi/items/e11ad0c4ea79db2dee84
+          }).bind(this) //thisの束縛。https://qiita.com/hosomichi/items/e11ad0c4ea79db2dee84
         )
       }
     }
+    ,
+    beforeRouteEnter(to,from,next){
+      //ここでコンポーネントの初期化にフックして画面表示データを取得する実装なども可能。
+      next();
+    }
   }
-
-  // var user = {
-  //   template: '#user-template'
-  // };
-  //
-  // var userProfile = {
-  //   template: '\
-  //   <div class="user-profile">\
-  //     <h3>こちらはユーザーID{{$route.params.userId}}のプロファイルページです</h3>\
-  //   </div>\
-  //   '
-  // };
-  //
-  // var userPosts = {
-  //   template: '\
-  //   <div class="user-profile">\
-  //     <h3>こちらはユーザーID{{$route.params.userId}}の投稿ページです</h3>\
-  //   </div>\
-  //   '
-  // };
 
   var users = {
     template: '<div>ユーザー一覧ページです</div>'
   };
 
+  var login = {
+    template : '#login',
+    data (){
+      return {
+        email : 'vue@example.com',
+        pass : '',
+        error : false
+      };
+    },
+    methods :{
+      login(){
+        Auth.login(this.email,this.pass,function(loggedIn){
+          if(!loggedIn){
+            this.error = true;
+          }else{
+            //クエリストリングで持ちまわった遷移先URLを取得して遷移。
+            this.$router.replace(this.$route.query.redirect || '/')
+          }
+        }.bind(this));
+      }
+    }
+  };
+
   var router = new VueRouter({
-    routes: [{
+    routes: [
+      {
         path: '/top',
         component: {
           template: '<div>トップページです</div>'
@@ -123,38 +170,44 @@
       {
         path: '/users',
         component: userList,
-        beforeEnter : (to,from,next) =>{
-          // alert(to.query)
-          // alert(to.query.redirect)
-          // alert(to.euery===undefined)
-          // alert(to.euery.redirect === 'true')
-          if(to.query === undefined){
-            next();
-          }else if(to.euery.redirect === 'true'){
+        //ルート単位でフック関数を定義する場合。
+        beforeEnter: (to, from, next) => {
+          if (to.query.redirect === 'true') {
             next('top')
-          }else{
+          } else {
             next()
           }
         }
+      },
+      {
+        path: '/user/:id',
+        component: {
+          template: '<div>UserDetailです <router-link to="/logout">ログアウト</router-link></div>'
+        },
+        //ユーザー詳細画面を表示する前に認証済みチェックをして、認証済みでなければログイン画面へ。
+        beforeEnter : function(to,from,next) {
+          if(!Auth.loggedIn()){
+            next({
+              path : '/login',
+              //遷移先画面に、本来移動したいURLをパラメータで保持。
+              query : {redirect:to.fullPath}
+            });
+          }else{
+            next();
+          }
+        }
+      },
+      {
+        path: '/login',
+        component: login
+      },
+      {
+        path: '/logout',
+        beforeEnter : function(to,from,next){
+          Auth.logout();
+          next('/')
+        }
       }
-      // ,
-      // {
-      //   path: '/user/:userId',
-      //   name: 'user', //ルートに名前を付けると、URLではなく名前と引数で呼べるようになる。
-      //   component: user,
-      //   //ネストされ多ルートに対して割り当てるコンポーネントの定義。
-      //   //この定義の場合/user/:userId/profileに対して割り当てられる。
-      //   //以下が表示されるのは、/user/:userId'が表示したテンプレート上に定義された<viww-router>タグ。
-      //   children: [{
-      //       path: 'profile',
-      //       component: userProfile
-      //     },
-      //     {
-      //       path: 'posts',
-      //       component: userPosts
-      //     }
-      //   ]
-      // }
     ]
   });
 
